@@ -23,5 +23,11 @@ export default class PlayOptions {
      * @type {boolean}
      */
     this.autoJoinLobby = true;
+
+    /**
+     * 自定义 master url，以便于支持独立部署或者本地调试）
+     * @type {string}
+     */
+    this.customMasterURL = null;
   }
 }

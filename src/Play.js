@@ -58,6 +58,7 @@ export default class Play extends EventEmitter {
     this._region = opts.region;
     this._autoJoinLobby = opts.autoJoinLobby;
     this._masterServer = null;
+    this._customMasterURL = opts.customMasterURL;
     this._gameServer = null;
     this._msgId = 0;
     this._requestMsg = {};
@@ -107,14 +108,20 @@ export default class Play extends EventEmitter {
       throw new TypeError(`${gameVersion} is not a string`);
     }
     this._gameVersion = gameVersion;
-    let masterURL = EastCNServerURL;
-    if (this._region === Region.NORTH_CN) {
-      masterURL = NorthCNServerURL;
-    } else if (this._region === Region.EAST_CN) {
+
+    let masterURL = this._customMasterURL;
+
+    if (masterURL == null) {
       masterURL = EastCNServerURL;
-    } else if (this._region === Region.US) {
-      masterURL = USServerURL;
+      if (this._region === Region.NORTH_CN) {
+        masterURL = NorthCNServerURL;
+      } else if (this._region === Region.EAST_CN) {
+        masterURL = EastCNServerURL;
+      } else if (this._region === Region.US) {
+        masterURL = USServerURL;
+      }
     }
+
     const params = `appId=${this._appId}&secure=true&ua=${this._getUA()}`;
     const url = `${masterURL}v1/router?${params}`;
     axios
